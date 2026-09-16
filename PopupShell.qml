@@ -29,7 +29,6 @@ FocusScope {
     signal tabActivated(int index)
     signal closeRequested()
 
-    function pulse() { pulseAnimation.restart() }
     function focusSearch() { searchField.forceActiveFocus() }
     function clearSearch() { searchField.text = "" }
 
@@ -71,22 +70,6 @@ FocusScope {
                     border.width: 2
                     border.color: Kirigami.Theme.backgroundColor
                     Behavior on color { ColorAnimation { duration: 280 } }
-                    Rectangle {
-                        id: pulseRing
-                        anchors.centerIn: parent
-                        width: parent.width
-                        height: width
-                        radius: width / 2
-                        color: "transparent"
-                        border.width: 1.5
-                        border.color: shell.statusColor
-                        opacity: 0
-                        ParallelAnimation {
-                            id: pulseAnimation
-                            NumberAnimation { target: pulseRing; property: "scale"; from: 1; to: 2.4; duration: 700; easing.type: Easing.OutCubic }
-                            NumberAnimation { target: pulseRing; property: "opacity"; from: 0.7; to: 0; duration: 700; easing.type: Easing.OutCubic }
-                        }
-                    }
                     HoverHandler { id: statusHover }
                     QQC2.ToolTip.visible: statusHover.hovered && shell.statusText !== ""
                     QQC2.ToolTip.text: shell.statusText
