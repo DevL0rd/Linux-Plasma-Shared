@@ -29,6 +29,7 @@ Item {
     property color lineColor2: Kirigami.Theme.neutralTextColor
     property real dangerFrom: -1
     property color dangerColor: Kirigami.Theme.negativeTextColor
+    property bool hoverable: true
 
     // reserved headroom at the top so the peak label always sits ABOVE its point
     // (just tall enough for the label -- keeps the most height for the graph)
@@ -242,7 +243,8 @@ Item {
     MouseArea {
         id: hover
         anchors.fill: parent
-        hoverEnabled: true
+        enabled: s.hoverable
+        hoverEnabled: s.hoverable
         acceptedButtons: Qt.NoButton   // don't steal clicks from anything beneath
         property int idx: -1
         property real mx: 0
