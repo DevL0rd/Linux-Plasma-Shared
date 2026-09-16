@@ -25,6 +25,10 @@ Item {
     property bool peakMarker: true     // floating value marker at the highest point
     // tooltip text for the hovered point (index 0 = oldest). Override per use.
     property var tipText: function(value, index, total) { return "" + value }
+    property var values2: []
+    property color lineColor2: Kirigami.Theme.neutralTextColor
+    property real dangerFrom: -1
+    property color dangerColor: Kirigami.Theme.negativeTextColor
 
     // reserved headroom at the top so the peak label always sits ABOVE its point
     // (just tall enough for the label -- keeps the most height for the graph)
@@ -57,14 +61,17 @@ Item {
             var ctx = getContext("2d")
             ctx.reset()
             var vals = s.values || []
+            var vals2 = s.values2 || []
             var n = vals.length
             if (n < 1 || width <= 0 || height <= 0)
                 return
 
             var pad = s.topPad
             var hi = s.rangeMax > 0 ? s.rangeMax : s.rangeFloor
-            if (s.rangeMax <= 0)
+            if (s.rangeMax <= 0) {
                 for (var k = 0; k < n; k++) hi = Math.max(hi, vals[k])
+                for (var k2 = 0; k2 < vals2.length; k2++) hi = Math.max(hi, vals2[k2])
+            }
             hi = Math.max(hi, 1)
             var dx = n > 1 ? width / (n - 1) : 0
             function yOf(v) { return height - Math.max(0, Math.min(1, v / hi)) * (height - pad) }
@@ -75,6 +82,42 @@ Item {
                     var x = i * dx, y = yOf(vals[i])
                     if (i === 0) ctx.moveTo(x, y); else ctx.lineTo(x, y)
                 }
+            }
+
+            if (s.dangerFrom >= 0 && s.dangerFrom < hi) {
+                var dy = yOf(s.dangerFrom)
+                var band = ctx.createLinearGradient(0, dy, 0, pad)
+                band.addColorStop(0, Qt.alpha(s.dangerColor, 0.02))
+                band.addColorStop(1, Qt.alpha(s.dangerColor, 0.12))
+                ctx.fillStyle = band
+                ctx.fillRect(0, pad, width, dy - pad)
+            }
+
+            if (vals2.length > 0) {
+                var n2 = vals2.length
+                var dx2 = n2 > 1 ? width / (n2 - 1) : 0
+                ctx.beginPath()
+                for (var j = 0; j < n2; j++) {
+                    var x2 = j * dx2, y2 = yOf(vals2[j])
+                    if (j === 0) ctx.moveTo(x2, y2); else ctx.lineTo(x2, y2)
+                }
+                if (s.filled) {
+                    ctx.lineTo(n2 > 1 ? (n2 - 1) * dx2 : width, height)
+                    ctx.lineTo(0, height)
+                    ctx.closePath()
+                    ctx.fillStyle = Qt.alpha(s.lineColor2, 0.10)
+                    ctx.fill()
+                    ctx.beginPath()
+                    for (var j2 = 0; j2 < n2; j2++) {
+                        var x3 = j2 * dx2, y3 = yOf(vals2[j2])
+                        if (j2 === 0) ctx.moveTo(x3, y3); else ctx.lineTo(x3, y3)
+                    }
+                }
+                ctx.lineWidth = 1.5
+                ctx.lineJoin = "round"
+                ctx.lineCap = "round"
+                ctx.strokeStyle = s.lineColor2
+                ctx.stroke()
             }
 
             // fill under the line
@@ -117,18 +160,21 @@ Item {
         function repaintIfChanged() {
             // skip the (GPU) repaint when the data is identical -> flat/idle graphs
             // and unchanged values cost nothing
-            var v = s.values, n = v.length, lv = lastVals
+            var v = s.values.concat([-1], s.values2 || []), n = v.length, lv = lastVals
             if (n === lv.length) {
                 var same = true
                 for (var i = 0; i < n; i++) if (v[i] !== lv[i]) { same = false; break }
                 if (same) return
             }
-            lastVals = v.slice()
+            lastVals = v
             requestPaint()
         }
         Connections {
             target: s
             function onValuesChanged() { canvas.repaintIfChanged() }
+            function onValues2Changed() { canvas.repaintIfChanged() }
+            function onDangerFromChanged() { canvas.requestPaint() }
+            function onLineColor2Changed() { canvas.requestPaint() }
             function onRangeMaxChanged() { canvas.requestPaint() }
             function onRangeFloorChanged() { canvas.requestPaint() }
             function onGradientChanged() { canvas.requestPaint() }
