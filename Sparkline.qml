@@ -36,6 +36,10 @@ Item {
     readonly property real topPad: peakMarker ? Math.ceil(Kirigami.Theme.smallFont.pixelSize * 1.35) : 0
 
     // blue (low) -> green/yellow -> red (full), matching the bar/meter fills
+    function css(c, a) {
+        return "rgba(" + Math.round(c.r * 255) + "," + Math.round(c.g * 255) + "," + Math.round(c.b * 255) + "," + (a === undefined ? c.a : a) + ")"
+    }
+
     function gradColor(v) {
         var t = Math.max(0, Math.min(1, v / 100))
         return Qt.hsla((1 - t) * 0.66, 0.62, 0.55, 1.0)
@@ -88,8 +92,8 @@ Item {
             if (s.dangerFrom >= 0 && s.dangerFrom < hi) {
                 var dy = yOf(s.dangerFrom)
                 var band = ctx.createLinearGradient(0, dy, 0, pad)
-                band.addColorStop(0, Qt.alpha(s.dangerColor, 0.02))
-                band.addColorStop(1, Qt.alpha(s.dangerColor, 0.12))
+                band.addColorStop(0, s.css(s.dangerColor, 0.02))
+                band.addColorStop(1, s.css(s.dangerColor, 0.12))
                 ctx.fillStyle = band
                 ctx.fillRect(0, pad, width, dy - pad)
             }
@@ -106,7 +110,7 @@ Item {
                     ctx.lineTo(n2 > 1 ? (n2 - 1) * dx2 : width, height)
                     ctx.lineTo(0, height)
                     ctx.closePath()
-                    ctx.fillStyle = Qt.alpha(s.lineColor2, 0.10)
+                    ctx.fillStyle = s.css(s.lineColor2, 0.10)
                     ctx.fill()
                     ctx.beginPath()
                     for (var j2 = 0; j2 < n2; j2++) {
@@ -117,7 +121,7 @@ Item {
                 ctx.lineWidth = 1.5
                 ctx.lineJoin = "round"
                 ctx.lineCap = "round"
-                ctx.strokeStyle = s.lineColor2
+                ctx.strokeStyle = s.css(s.lineColor2)
                 ctx.stroke()
             }
 
@@ -129,12 +133,12 @@ Item {
                 ctx.closePath()
                 if (s.gradient) {
                     var fg = ctx.createLinearGradient(0, height, 0, pad)
-                    fg.addColorStop(0.0, Qt.alpha(s.gradColor(0), 0.04))
-                    fg.addColorStop(0.5, Qt.alpha(s.gradColor(50), 0.15))
-                    fg.addColorStop(1.0, Qt.alpha(s.gradColor(100), 0.30))
+                    fg.addColorStop(0.0, s.css(s.gradColor(0), 0.04))
+                    fg.addColorStop(0.5, s.css(s.gradColor(50), 0.15))
+                    fg.addColorStop(1.0, s.css(s.gradColor(100), 0.30))
                     ctx.fillStyle = fg
                 } else {
-                    ctx.fillStyle = Qt.alpha(s.lineColor, 0.16)
+                    ctx.fillStyle = s.css(s.lineColor, 0.16)
                 }
                 ctx.fill()
             }
@@ -146,13 +150,13 @@ Item {
             ctx.lineCap = "round"
             if (s.gradient) {
                 var lg = ctx.createLinearGradient(0, height, 0, pad)
-                lg.addColorStop(0.00, s.gradColor(0))
-                lg.addColorStop(0.33, s.gradColor(33))
-                lg.addColorStop(0.66, s.gradColor(66))
-                lg.addColorStop(1.00, s.gradColor(100))
+                lg.addColorStop(0.00, s.css(s.gradColor(0)))
+                lg.addColorStop(0.33, s.css(s.gradColor(33)))
+                lg.addColorStop(0.66, s.css(s.gradColor(66)))
+                lg.addColorStop(1.00, s.css(s.gradColor(100)))
                 ctx.strokeStyle = lg
             } else {
-                ctx.strokeStyle = s.lineColor
+                ctx.strokeStyle = s.css(s.lineColor)
             }
             ctx.stroke()
         }
