@@ -54,7 +54,6 @@ ColumnLayout {
                 GradientStop { position: 0; color: Qt.alpha(bar.color, 0.55) }
                 GradientStop { position: 1; color: bar.color }
             }
-            Behavior on width { NumberAnimation { duration: 350; easing.type: Easing.OutCubic } }
         }
         Rectangle {
             visible: bar.peak > bar.value + 1
@@ -64,7 +63,6 @@ ColumnLayout {
             radius: 1
             x: Math.max(0, Math.min(parent.width - width, parent.width * bar.peak / 100))
             color: Qt.alpha(bar.color, 0.55)
-            Behavior on x { NumberAnimation { duration: 350; easing.type: Easing.OutCubic } }
         }
     }
 

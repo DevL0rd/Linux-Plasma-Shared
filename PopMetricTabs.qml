@@ -129,7 +129,6 @@ ColumnLayout {
                         font.weight: Font.DemiBold
                         font.features: { "tnum": 1 }
                         elide: Text.ElideRight
-                        Behavior on color { ColorAnimation { duration: 280 } }
                     }
                 }
             }

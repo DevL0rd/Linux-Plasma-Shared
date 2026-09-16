@@ -17,7 +17,6 @@ ColumnLayout {
     signal clicked()
 
     property real shown: Math.max(0, Math.min(100, value))
-    Behavior on shown { NumberAnimation { duration: 450; easing.type: Easing.OutCubic } }
 
     spacing: Kirigami.Units.smallSpacing
 
@@ -74,7 +73,6 @@ ColumnLayout {
                 font.weight: Font.DemiBold
                 font.features: { "tnum": 1 }
                 color: ring.color
-                Behavior on color { ColorAnimation { duration: 280 } }
             }
             PlasmaComponents.Label {
                 text: ring.unit

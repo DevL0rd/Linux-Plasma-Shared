@@ -44,7 +44,6 @@ Item {
     implicitHeight: vertical ? layout.implicitHeight : panelThickness
 
     property real shownFraction: Math.max(0, Math.min(1, fraction))
-    Behavior on shownFraction { NumberAnimation { duration: 350; easing.type: Easing.OutCubic } }
 
     GridLayout {
         id: layout
@@ -126,7 +125,6 @@ Item {
                     font.weight: Font.DemiBold
                     font.features: { "tnum": 1 }
                     Layout.alignment: chip.vertical ? Qt.AlignHCenter : Qt.AlignBaseline
-                    Behavior on color { ColorAnimation { duration: 280 } }
                 }
                 PlasmaComponents.Label {
                     visible: chip.secondary !== "" || chip.widestSecondary !== ""
@@ -138,7 +136,6 @@ Item {
                     font.features: { "tnum": 1 }
                     opacity: 0.8
                     Layout.alignment: chip.vertical ? Qt.AlignHCenter : Qt.AlignBaseline
-                    Behavior on color { ColorAnimation { duration: 280 } }
                 }
             }
 

@@ -39,7 +39,6 @@ ColumnLayout {
             font.weight: Font.DemiBold
             font.features: { "tnum": 1 }
             Layout.alignment: Qt.AlignBaseline
-            Behavior on color { ColorAnimation { duration: 280 } }
         }
         PlasmaComponents.Label {
             visible: stat.unit !== ""

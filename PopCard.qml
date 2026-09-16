@@ -77,7 +77,6 @@ Rectangle {
                 color: card.trailingColor
                 font.weight: Font.Bold
                 font.features: { "tnum": 1 }
-                Behavior on color { ColorAnimation { duration: 280 } }
             }
             PlasmaComponents.ToolButton {
                 visible: card.collapsible
