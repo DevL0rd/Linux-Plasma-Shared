@@ -19,10 +19,26 @@ Item {
     property bool vertical: false
     property bool showLabel: false
     property real panelThickness: Kirigami.Units.gridUnit * 2
+    property string widestValue
+    property string widestSecondary
 
     readonly property bool ringStyle: chipStyle === "ring" && fraction >= 0
     readonly property bool barStyle: chipStyle === "bar" && fraction >= 0
     readonly property real valueSize: Math.max(Kirigami.Theme.smallFont.pixelSize, Math.min(Kirigami.Theme.defaultFont.pixelSize * 1.05, panelThickness * (showLabel ? 0.34 : 0.42)))
+
+    TextMetrics {
+        id: valueMetrics
+        font.pixelSize: chip.valueSize
+        font.weight: Font.DemiBold
+        font.features: { "tnum": 1 }
+        text: chip.widestValue
+    }
+    TextMetrics {
+        id: secondaryMetrics
+        font.pixelSize: chip.valueSize * 0.78
+        font.features: { "tnum": 1 }
+        text: chip.widestSecondary
+    }
 
     implicitWidth: vertical ? panelThickness : layout.implicitWidth
     implicitHeight: vertical ? layout.implicitHeight : panelThickness
@@ -104,6 +120,8 @@ Item {
                 PlasmaComponents.Label {
                     text: chip.value
                     color: chip.valueColor
+                    horizontalAlignment: chip.vertical ? Text.AlignHCenter : Text.AlignRight
+                    Layout.minimumWidth: chip.widestValue !== "" ? Math.ceil(valueMetrics.advanceWidth) : 0
                     font.pixelSize: chip.valueSize
                     font.weight: Font.DemiBold
                     font.features: { "tnum": 1 }
@@ -111,9 +129,11 @@ Item {
                     Behavior on color { ColorAnimation { duration: 280 } }
                 }
                 PlasmaComponents.Label {
-                    visible: chip.secondary !== ""
+                    visible: chip.secondary !== "" || chip.widestSecondary !== ""
                     text: chip.secondary
                     color: chip.secondaryColor
+                    horizontalAlignment: chip.vertical ? Text.AlignHCenter : Text.AlignLeft
+                    Layout.minimumWidth: chip.widestSecondary !== "" ? Math.ceil(secondaryMetrics.advanceWidth) : 0
                     font.pixelSize: chip.valueSize * 0.78
                     font.features: { "tnum": 1 }
                     opacity: 0.8
