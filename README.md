@@ -1,4 +1,4 @@
-# Linux-Plasma-Shared
+# Plasma-Shared
 
 Shared QML components and JavaScript helpers used by the `Linux-*` Plasma 6
 widgets (System Monitor, Process Monitor, Router Monitor, Log Monitor, Plasma
