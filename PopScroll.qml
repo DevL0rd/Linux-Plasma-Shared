@@ -19,6 +19,9 @@ PlasmaComponents.ScrollView {
         scrollAnimation.restart()
     }
 
+    readonly property real scrollGutter: QQC2.ScrollBar.vertical ? QQC2.ScrollBar.vertical.implicitWidth : 0
+    leftPadding: mirrored ? scrollGutter : 0
+    rightPadding: mirrored ? 0 : scrollGutter
     contentWidth: availableWidth
     clip: true
     QQC2.ScrollBar.horizontal.policy: QQC2.ScrollBar.AlwaysOff
