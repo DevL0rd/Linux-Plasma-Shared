@@ -47,7 +47,7 @@ ColumnLayout {
         Rectangle {
             height: parent.height
             radius: height / 2
-            width: Math.max(height, parent.width * Math.max(0, Math.min(1, bar.value / 100)))
+            width: Math.max(height, Math.round(parent.width * Math.max(0, Math.min(1, bar.value / 100)) * Screen.devicePixelRatio) / Screen.devicePixelRatio)
             opacity: bar.value > 0 ? 1 : 0
             gradient: Gradient {
                 orientation: Gradient.Horizontal

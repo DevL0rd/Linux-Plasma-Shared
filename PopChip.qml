@@ -82,7 +82,7 @@ Item {
                     strokeWidth: miniRing.thickness
                     fillColor: "transparent"
                     capStyle: ShapePath.RoundCap
-                    PathAngleArc { centerX: miniRing.width / 2; centerY: miniRing.height / 2; radiusX: miniRing.radius; radiusY: miniRing.radius; startAngle: -90; sweepAngle: Math.max(1, 360 * chip.shownFraction) }
+                    PathAngleArc { centerX: miniRing.width / 2; centerY: miniRing.height / 2; radiusX: miniRing.radius; radiusY: miniRing.radius; startAngle: -90; sweepAngle: Math.max(1, Math.round(360 * chip.shownFraction)) }
                 }
             }
         }
@@ -152,7 +152,7 @@ Item {
                 Rectangle {
                     height: parent.height
                     radius: 1
-                    width: parent.width * chip.shownFraction
+                    width: Math.round(parent.width * chip.shownFraction * Screen.devicePixelRatio) / Screen.devicePixelRatio
                     color: chip.barColor
                 }
             }

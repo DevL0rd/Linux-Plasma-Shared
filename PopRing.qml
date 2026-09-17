@@ -57,7 +57,7 @@ ColumnLayout {
                     radiusX: arc.radius
                     radiusY: arc.radius
                     startAngle: 135
-                    sweepAngle: Math.max(0.5, 270 * ring.shown / 100)
+                    sweepAngle: Math.max(0.5, Math.round(540 * ring.shown / 100) / 2)
                 }
             }
         }
