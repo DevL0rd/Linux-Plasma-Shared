@@ -51,3 +51,7 @@ Update the shared components everywhere:
 # in this repo: edit + commit + push, then in each consumer:
 git submodule update --remote shared/common
 ```
+
+## License
+
+Released under the [MIT License](LICENSE).
