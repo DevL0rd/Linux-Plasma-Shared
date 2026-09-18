@@ -37,7 +37,6 @@ function span(items, spacing, key) {
 
 function share(total, items, spacing) {
     var picks = []
-    var used = 0
     var count = 0
     var i
     for (i = 0; i < items.length; ++i) {
@@ -46,24 +45,39 @@ function share(total, items, spacing) {
             continue
         }
         picks.push(items[i].low)
-        used += items[i].sizes[items[i].low]
         count++
     }
-    var left = total - used - Math.max(0, count - 1) * spacing
-    for (var round = 0; round < ORDER.length; ++round) {
+    var gaps = Math.max(0, count - 1) * spacing
+    var lowest = 0
+    var highest = ORDER.length - 1
+    for (i = 0; i < items.length; ++i) {
+        if (picks[i] < 0)
+            continue
+        lowest = Math.max(lowest, items[i].low)
+        highest = Math.min(highest, items[i].high)
+    }
+    highest = Math.max(highest, lowest)
+    for (var stage = highest; stage >= lowest; --stage) {
+        var used = 0
         for (i = 0; i < items.length; ++i) {
-            if (picks[i] < 0 || picks[i] >= items[i].high)
+            if (picks[i] < 0)
                 continue
-            var cost = items[i].sizes[picks[i] + 1] - items[i].sizes[picks[i]]
-            if (cost > left)
-                break
-            left -= cost
-            picks[i]++
+            used += items[i].sizes[Math.min(Math.max(stage, items[i].low), items[i].high)]
         }
+        if (used + gaps > total && stage > lowest)
+            continue
+        for (i = 0; i < items.length; ++i) {
+            if (picks[i] >= 0)
+                picks[i] = Math.min(Math.max(stage, items[i].low), items[i].high)
+        }
+        break
     }
     var out = []
-    for (i = 0; i < items.length; ++i)
+    var left = total - gaps
+    for (i = 0; i < items.length; ++i) {
         out.push(picks[i] < 0 ? 0 : items[i].sizes[picks[i]])
+        left -= out[i]
+    }
     for (i = 0; i < items.length && left > 0; ++i) {
         if (!items[i].flex)
             continue
