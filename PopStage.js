@@ -64,7 +64,7 @@ function share(total, items, spacing) {
                 continue
             used += items[i].sizes[Math.min(Math.max(stage, items[i].low), items[i].high)]
         }
-        if (used + gaps > total && stage > lowest)
+        if (used + gaps > total + 0.5 && stage > lowest)
             continue
         for (i = 0; i < items.length; ++i) {
             if (picks[i] >= 0)
